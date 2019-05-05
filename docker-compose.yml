@@ -1,0 +1,29 @@
+version: "3.0"
+
+services:
+  bitcoincashd:
+    image: bitcoincashd
+    build:
+      context: .
+    logging:
+      driver: json-file
+      options:
+        max-file: "5"
+        max-size: 10m
+    container_name: bitcoincashd
+    tty: true
+    stdin_open: true
+    expose:
+      - 8332
+      - 18332
+    ports:
+      - 8332:8332
+      - 18332:18332
+    volumes:
+      - bitcoincashd-data-volume:/root/.bitcoin/
+      - ./bitcoin.conf:/bitcoin-abc/bin/bitcoin.conf
+    command: --printtoconsole -conf=/bitcoin-abc/bin/bitcoin.conf
+
+volumes:
+  bitcoincashd-data-volume:
+    external: true
